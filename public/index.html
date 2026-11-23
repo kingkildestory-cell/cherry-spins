@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#210b19">
+  <title>Cherry Spins</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">🍒</span><span>CHERRY <b>SPINS</b></span></div>
+      <div class="top-stats"><span class="pill" id="spinCount">🎟 1</span><span class="pill" id="balance">💎 0</span></div>
+    </header>
+
+    <main>
+      <section class="screen active" id="wheelScreen">
+        <div class="hero-line"><span>ТВОЙ ШАНС НА ПОДАРОК</span><span class="live-dot">● LIVE</span></div>
+        <div class="wheel-stage">
+          <div class="pointer"></div>
+          <div class="wheel" id="wheel">
+            <div class="wheel-inner" id="wheelSegments"></div>
+            <div class="wheel-center"><span>🍒</span><small>SPIN</small></div>
+          </div>
+          <div class="wheel-glow"></div>
+        </div>
+        <div class="spin-meta"><span>ДОСТУПНО ПРОКРУТОК</span><strong id="availableSpins">1</strong></div>
+        <button class="primary-btn" id="spinBtn">Крутить</button>
+        <button class="gold-btn" id="paidSpinBtn">Крутить за 5 ⭐</button>
+        <div class="cooldown" id="cooldown"></div>
+        <div class="prize-caption">🎁  /  ПРИЗЫ КОЛЕСА</div>
+        <div class="prize-strip" id="prizeStrip"></div>
+      </section>
+
+      <section class="screen" id="tasksScreen">
+        <div class="section-heading"><div><span class="eyebrow">ПОЛУЧАЙ БОНУСЫ</span><h1>Задания</h1></div><span class="heading-icon">✦</span></div>
+        <p class="muted">Выполняй задания и получай дополнительные прокрутки колеса.</p>
+        <div id="tasksList" class="stack"></div>
+        <div class="note-card">🍒 <span>Новые задания появляются регулярно. Заглядывай сюда каждый день!</span></div>
+      </section>
+
+      <section class="screen" id="friendsScreen">
+        <div class="section-heading"><div><span class="eyebrow">ИГРАЙ ВМЕСТЕ</span><h1>Друзья</h1></div><span class="heading-icon">♧</span></div>
+        <div class="referral-card">
+          <div class="ref-big">+1</div><div class="ref-label">шанс на подарок</div>
+          <p>Приглашай друзей и получай бонусы за их активность.</p>
+          <div class="ref-count"><span>Приглашено друзей</span><b id="refCount">0</b></div>
+          <button class="primary-btn" id="inviteBtn">♧ &nbsp; Пригласить друга</button>
+        </div>
+        <div class="panel">
+          <h3>♧ Реферальная система</h3>
+          <div class="rule"><span>За каждого приглашённого друга</span><b>+1 шанс</b></div>
+          <div class="rule"><span>За 3 активных друзей</span><b>+2</b></div>
+          <div class="rule"><span>За 5 активных друзей</span><b>+3</b></div>
+          <div class="rule"><span>За 10 активных друзей</span><b>+5</b></div>
+          <p class="tiny muted">Бонусы начисляются по правилам проекта. Реферальная статистика обновляется автоматически.</p>
+        </div>
+        <div class="panel">
+          <h3>Твоя ссылка</h3><div class="copy-row"><code id="refLink">Загружаем…</code><button class="copy-btn" id="copyBtn">Копировать</button></div>
+        </div>
+      </section>
+
+      <section class="screen" id="inventoryScreen">
+        <div class="section-heading"><div><span class="eyebrow">ТВОИ НАГРАДЫ</span><h1>Инвентарь</h1></div><span class="heading-icon">▣</span></div>
+        <div class="inventory-summary"><div class="inventory-cherry">🍒</div><div><b id="inventoryTotal">0 предметов</b><small>Здесь появляются призы с колеса</small></div></div>
+        <div id="inventoryGrid" class="inventory-grid"></div>
+        <button class="secondary-btn" data-go="wheel">К колесу</button>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item" data-tab="tasks"><span>▤</span><small>Задания</small></button>
+      <button class="nav-item active" data-tab="wheel"><span>◉</span><small>Колесо</small></button>
+      <button class="nav-item" data-tab="friends"><span>♧</span><small>Друзья</small></button>
+      <button class="nav-item" data-tab="inventory"><span>▣</span><small>Инвентарь</small></button>
+    </nav>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="modal-backdrop" id="modal"><div class="modal"><button class="modal-close" id="modalClose">×</button><div class="modal-emoji" id="modalEmoji">🍒</div><div class="eyebrow">ТВОЙ ПРИЗ</div><h2 id="modalTitle">Поздравляем!</h2><p id="modalText">Приз добавлен в инвентарь.</p><button class="primary-btn" id="modalOk">Отлично!</button></div></div>
+  <script src="/app.js"></script>
+</body>
+</html>
