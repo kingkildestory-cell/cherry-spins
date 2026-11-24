@@ -188,5 +188,6 @@ app.get("/api/admin/stats", (req,res) => {
     claims:db.prepare("SELECT COUNT(*) n FROM task_claims").get().n
   });
 });
+registerArcadeRoutes({ app, db, auth, ensureUser, now });
 app.get("*", (_req,res) => res.sendFile(path.join(__dirname,"public","index.html")));
 app.listen(PORT, () => console.log(`Cherry Spins running on http://localhost:${PORT}`));
