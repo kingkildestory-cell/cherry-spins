@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
+import { registerAdminRoutes } from "./admin-server.js";
 import { registerArcadeRoutes } from "./arcade-server.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
