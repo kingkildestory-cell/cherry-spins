@@ -16,6 +16,48 @@
       <div class="top-stats"><span class="pill" id="spinCount">🎟 1</span><span class="pill" id="balance">💎 0</span></div>
     </header>
 
+    <section class="screen" id="adminScreen">
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">CONTROL CENTER</span>
+      <h1>Админ-панель</h1>
+    </div>
+    <span class="heading-icon">🛡️</span>
+  </div>
+
+  <div class="panel">
+    <h3>Статистика</h3>
+    <p>Всего игроков: <b id="adminPlayers">—</b></p>
+    <p>Всего начислено: <b id="adminIssued">—</b> Cherry Points</p>
+    <button class="secondary-btn" id="adminRefresh">Обновить</button>
+  </div>
+
+  <div class="panel">
+    <h3>Баланс игрока</h3>
+    <label>Telegram ID игрока</label>
+    <input id="adminUserId" type="text" inputmode="numeric" placeholder="Telegram ID">
+    <button class="primary-btn" id="adminFind">Найти игрока</button>
+
+    <div id="adminPlayerInfo" style="display:none;margin-top:15px">
+      <p>Игрок: <b id="adminPlayerName">—</b></p>
+      <p>Текущий баланс: <b id="adminPlayerBalance">0</b> Cherry Points</p>
+
+      <label>Количество Cherry Points</label>
+      <input id="adminAmount" type="number" min="1" step="1" placeholder="Например, 1000">
+
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="primary-btn" id="adminCredit">+ Начислить</button>
+        <button class="secondary-btn" id="adminDebit">− Списать</button>
+      </div>
+    </div>
+    <p id="adminMessage" class="muted"></p>
+  </div>
+
+  <div class="panel">
+    <h3>Последние операции</h3>
+    <div id="adminHistory">Нажми «Обновить»</div>
+  </div>
+</section>
     <main>
       
 <section class="screen" id="gamesScreen">
@@ -117,6 +159,10 @@
       <button class="nav-item active" data-tab="wheel"><span>◉</span><small>Колесо</small></button>
       <button class="nav-item" data-tab="friends"><span>♧</span><small>Друзья</small></button>
       <button class="nav-item" data-tab="inventory"><span>▣</span><small>Инвентарь</small></button>
+      <button class="nav-item" data-tab="admin" id="adminNav" style="display:none">
+  <span>🛡️</span>
+  <small>Админ</small>
+</button>
     </nav>
   </div>
   <div class="toast" id="toast"></div>
