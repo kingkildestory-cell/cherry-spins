@@ -189,5 +189,6 @@ app.get("/api/admin/stats", (req,res) => {
   });
 });
 registerArcadeRoutes({ app, db, auth, ensureUser, now });
+import { registerAdminRoutes } from "./admin-server.js";
 app.get("*", (_req,res) => res.sendFile(path.join(__dirname,"public","index.html")));
 app.listen(PORT, () => console.log(`Cherry Spins running on http://localhost:${PORT}`));
