@@ -91,4 +91,117 @@ $("inviteBtn").addEventListener("click",()=>{
 $("copyBtn").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(state.referral.link);toast("Ссылка скопирована")}catch{toast(state.referral.link)}});
 $("modalClose").addEventListener("click",()=>$("modal").classList.remove("show"));
 $("modalOk").addEventListener("click",()=>$("modal").classList.remove("show"));
+
+// ===== CHERRY SPINS ADMIN PANEL =====
+const ADMIN_ID = "5561285502";
+const currentTelegramId = String(tg?.initDataUnsafe?.user?.id || "");
+const adminNav = $("adminNav");
+
+if (adminNav && currentTelegramId === ADMIN_ID) {
+  adminNav.style.display = "";
+}
+
+let adminCurrentPlayer = null;
+
+function adminMessage(message) {
+  $("adminMessage").textContent = message;
+}
+
+async function adminRefresh() {
+  try {
+    const data = await api("/api/admin/overview");
+
+    $("adminPlayers").textContent = data.players;
+    $("adminIssued").textContent = data.total_issued;
+
+    $("adminHistory").innerHTML = data.history.length
+      ? data.history.map(item => `
+        <div style="padding:10px 0;border-bottom:1px solid #633047">
+          <b>${item.action === "credit" ? "➕ Начисление" : "➖ Списание"}</b>
+          <br>Игрок: ${String(item.player_name).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+          <br>ID: ${item.user_id}
+          <br>Количество: ${item.amount}
+          <br>Баланс после операции: ${item.balance_after}
+        </div>
+      `).join("")
+      : "Операций пока нет.";
+  } catch (e) {
+    adminMessage(e.message);
+  }
+}
+
+async function adminFindPlayer() {
+  const id = $("adminUserId").value.trim();
+
+  if (!/^\d{1,24}$/.test(id)) {
+    adminMessage("Введи правильный Telegram ID.");
+    return;
+  }
+
+  try {
+    const player = await api("/api/admin/player/" + encodeURIComponent(id));
+
+    adminCurrentPlayer = player;
+    $("adminPlayerInfo").style.display = "block";
+    $("adminPlayerName").textContent =
+      player.first_name || player.username || player.id;
+    $("adminPlayerBalance").textContent = player.balance;
+
+    adminMessage("Игрок найден.");
+  } catch (e) {
+    adminCurrentPlayer = null;
+    $("adminPlayerInfo").style.display = "none";
+    adminMessage(e.message);
+  }
+}
+
+async function adminChangeBalance(action) {
+  if (!adminCurrentPlayer) {
+    adminMessage("Сначала найди игрока.");
+    return;
+  }
+
+  const amount = Number($("adminAmount").value);
+
+  if (!Number.isSafeInteger(amount) || amount < 1) {
+    adminMessage("Введи целое количество больше нуля.");
+    return;
+  }
+
+  const question = action === "credit"
+    ? `Начислить ${amount} Cherry Points игроку?`
+    : `Списать ${amount} Cherry Points у игрока?`;
+
+  if (!confirm(question)) return;
+
+  try {
+    const result = await api("/api/admin/balance", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: adminCurrentPlayer.id,
+        amount,
+        action
+      })
+    });
+
+    adminCurrentPlayer = result;
+    $("adminPlayerBalance").textContent = result.balance;
+    $("adminAmount").value = "";
+
+    adminMessage("Баланс успешно изменён.");
+    await adminRefresh();
+  } catch (e) {
+    adminMessage(e.message);
+  }
+}
+
+if (adminNav && currentTelegramId === ADMIN_ID) {
+  $("adminRefresh").addEventListener("click", adminRefresh);
+  $("adminFind").addEventListener("click", adminFindPlayer);
+  $("adminCredit").addEventListener("click", () => adminChangeBalance("credit"));
+  $("adminDebit").addEventListener("click", () => adminChangeBalance("debit"));
+
+  adminNav.addEventListener("click", adminRefresh);
+}
+
 load();
